@@ -1,5 +1,8 @@
 Apply rules in table 2 to each record of table 1
 
+see the more production friendly solution on end by
+Bartosz Jablonski <yabwon@gmail.com>
+
 github
 https://tinyurl.com/yb75f9q2
 https://github.com/rogerjdeangelis/utl_apply_rules_in_table_2_to_each_record_of_table_1
@@ -103,4 +106,65 @@ cards4;
  r3 Field1 <= Field2
 ;;;;
 run;quit;
+
+see the more production friendly solution on end by
+Bartosz Jablonski <yabwon@gmail.com>
+
+*____             _
+| __ )  __ _ _ __| |_
+|  _ \ / _` | '__| __|
+| |_) | (_| | |  | |_
+|____/ \__,_|_|   \__|
+
+;
+
+Some time ago I had similar problem to solve, it was like: "check if given 'code'
+is satisfied by 'x' and 'y' in given observation?" and good old filename + quote()
+function + %infile did the job quite well (see below)
+
+all the best
+Bart
+
+data testb;
+length x y 8 code $ 50;
+code = '(x > 1)';                  x= 3; y=11; output;
+code = '(x < 1 and (9 < y < 13))'; x=-3; y=11; output;
+code = '(x < 1)';                  x= 3; y=11; output;
+code = '(y < 1)';                  x= 3; y=-1; output;
+run;
+
+proc sql;
+create table  code_b as
+select distinct QUOTE(strip(code)) as q
+from testb;
+quit;
+
+
+filename testb2 TEMP lrecl=2000;
+
+data _null_;
+file testb2;
+
+ put "data testb2;";
+ put "set testb;";
+ put "select;";
+
+do until(eof);
+ set  code_b end=EOF;
+ length _X_ $ 2000;
+ _X_ = "when (code = " || strip(q) || ") do; if (" || dequote(q) || ") then test=1; else test=0; end;";
+ put _X_;
+end;
+
+ put "otherwise;";
+ put "end;";
+ put "run;";
+
+stop;
+run;
+
+%include testb2 / SOURCE2;
+filename testb2;
+
+
 
