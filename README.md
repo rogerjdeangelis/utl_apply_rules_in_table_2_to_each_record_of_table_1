@@ -1,0 +1,2 @@
+# utl_apply_rules_in_table_2_to_each_record_of_table_1
+Apply rules in table 2 to each record of table 1. Keywords: sas sql join merge big data analytics macros oracle teradata mysql sas communities stackoverflow statistics artificial inteligence AI Python R Java Javascript WPS Matlab SPSS Scala Perl C C# Excel MS Access JSON graphics maps NLP natural language processing machine learning igraph DOSUBL DOW loop stackoverflow SAS community.
